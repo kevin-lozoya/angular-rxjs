@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,32 +20,30 @@ export class AppComponent implements OnInit {
    * recibirá estos datos y, sin hacer nada, actualizará los valores en pantalla o donde sea necesaria esta información.
    */
   firstObservable() {
-    const observer = {
-      // Callback que se ejecuta cuando recibimos un dato
-      next: value => console.log('Callback next', value),
-      error: error => console.log('Callback error', error),
-      // Se ejecuta cuando cerramos el stream del observable
-      complete: () => console.log('Observable completado'),
-    };
-
-    // Creamos un observable que lanza una serie de callback
     const observable = new Observable(subscriber => {
-      subscriber.next('Hola');
-      subscriber.next('Hola observable...');
-      subscriber.complete();
-      // En el momento que se llama a complete(), el observable se cierra y el observable ya no envían datos
-      subscriber.next('Qué pasa tras completar...');
+      let count = 0;
+
+      setInterval(() => {
+        subscriber.next(count);
+        count++;
+      }, 1000)
     });
 
-    // Es necesario suscribirse al observable para que empiece la ejecución, aunque más correcta
-    observable.subscribe(observer);
-
+    console.log('Antes de ejecutar el observable...');
+    // Creamos un observable que lanza una serie de callback
     // La manera más común de suscribirse a observables es esta
-    observable.subscribe(
+    const subscription = observable.subscribe(
       value => console.log('Callback next', value),
       error => console.log('Callback error', error),
       // El complete aquí no se suele utilizar
       () => console.log('Observable completado'),
     );
+    console.log('Después de ejecutar el observable...');
+
+    // Cerrar la suscripción para liberar los recursos que está utilizando el Observable
+    setTimeout(() => {
+      subscription.unsubscribe();
+    }, 3500);
   }
+
 }
