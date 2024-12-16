@@ -1,0 +1,23 @@
+/* Estilo base: 100% para pantallas pequeñas */
+.responsive-div {
+  width: 100%;
+  display: inline-block;
+}
+
+/* Pantallas medianas (tabletas) */
+@media (min-width: 768px) {
+  .responsive-div {
+      width: 50%;
+  }
+}
+
+/* Pantallas grandes (escritorio) */
+@media (min-width: 1200px) {
+  .responsive-div {
+      width: 33.33%;
+  }
+}
+
+.img-card {
+  width: 100%;
+}

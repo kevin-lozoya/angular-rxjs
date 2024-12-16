@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { PublicService } from './public/public.service';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +8,28 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'angular-rxjs';
+  characters: any[] = [];
+  continents: any[] = [];
+
+  constructor(private publicService: PublicService) { }
 
   ngOnInit(): void {
-      this.firstObservable();
+    this.getCharacters();
+    this.getContinents();
+  }
+
+  getCharacters() {
+    this.publicService.getCharacters().subscribe(
+      response => this.characters = response,
+      error => console.log(error),
+    );
+  }
+
+  getContinents() {
+    this.publicService.getContinents().subscribe(
+      response => this.continents = response,
+      error => console.log(error),
+    );
   }
 
   /**
@@ -45,5 +64,4 @@ export class AppComponent implements OnInit {
       subscription.unsubscribe();
     }, 3500);
   }
-
 }
